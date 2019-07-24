@@ -1,0 +1,26 @@
+{
+  "name": "hw-scraper",
+  "version": "1.0.0",
+  "description": "An article scraping web app which allows users to save and comment on articles",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spookypants/hw-scraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spookypants/hw-scraper/issues"
+  },
+  "homepage": "https://github.com/spookypants/hw-scraper#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "mongoose": "^5.6.6"
+  }
+}
