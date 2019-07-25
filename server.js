@@ -62,15 +62,40 @@ app.get("/articles", function(req, res) {
         res.json(err);
     });
 });
+
 //route to save an article
-app.post("/save", function(req, res) {
+app.post("/saved", function(req, res) {
     db.Article.create()
-})
+});
+
 //route to list all saved articles
+app.get("/saved", function(req, res) {
+    db.Article.find({})
+    .then(function(dbArticle) {
+        res.json(dbArticle);
+    })
+    .catch(function(err) {
+        res.json(err);
+    });
+});
 
 //route to save a note on a saved article
+app.post("/saved/:id", function(req, res) {
+    db.Note.create(req.body).then(function(dbNote) {
+        return db.Article.findOneAndUpdate(
+            { _id: req.params.id }, 
+            { $push: {note: dbNote._id} },
+            { new: true }
+            )
+    }).then(function(dbArticle) {
+        res.json(dbArticle);
+    }).catch(function(err) {
+        res.json(err);
+    });
+});
 
 //route to delete a note
+app.delete()
 
 //route to unsave a note
 
