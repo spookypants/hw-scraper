@@ -1,14 +1,73 @@
-// Grab the articles as a json
-$.getJSON("/articles", function(data) {
-    // For each one
-    for (var i = 0; i < data.length; i++) {
-      // Display the apropos information on the page
-      $("#articles").append("<div class='card' data-_id='" 
-      + data[i]._id + "'>" 
-      + "<div class='card-header'><h3><a class='article-link' target='_blank' href='" 
-      + data[i].link + "'>" 
-      + data[i].title + "</a><a class='btn btn-success save'>Save Article</a></h3></div>"
-      + "<div class='card-body'>" + data[i].description + "</div></div>"
-      );
+// scrape button
+$("#scrape").on("click", function() {
+    $.ajax({
+        method: "GET",
+        url: "/scrape",
+    }).then(function(data) {
+        console.log(data)
+        window.location = "/"
+    })
+});
+
+// active nav click
+$(".navbar-nav li").on("click", function() {
+    $(".navbar-nav li").removeClass("active");
+    $(this).addClass("active");
+});
+
+// save article
+$(".save").on("click", function() {
+    var thisId = $(this).attr("data-id");
+    $.ajax({
+        method: "POST",
+        url: "/articles/saved/" + thisId
+    }).then(function(data) {
+        window.location = "/"
+    })
+});
+
+// delete article
+$(".delete").on("click", function() {
+    var thisId = $(this).attr("data-id");
+    $.ajax({
+        method: "DELETE",
+        url: "/articles/saved/" + thisId
+    }).then(function(data) {
+        window.location = "/saved"
+    })
+});
+
+//save note
+$(".saveNote").on("click", function() {
+    var thisId = $(this).attr("data-id");
+    if (!$("#noteText" + thisId).val()) {
+        alert("Please enter a note to save!");
+    } else {
+        $.ajax({
+            method: "POST",
+            url: "/notes/saved/" + thisId,
+            data: {
+                text: $("#noteText" + thisId).val()
+            }
+        }).then(function(data) {
+            console.log(data);
+            $("#noteText" + thisId).val("");
+            $(".modalNote").modal("hide");
+            window.location = "/saved"
+        });
     }
-  });
+});
+
+//delete note
+$(".deleteNote").on("click", function() {
+    var noteId = $(this).attr("data-note-id");
+    var articleId = $(this).attr("data-article-id");
+    $.ajax({
+        method: "DELETE",
+        url: "/notes/saved/" + noteId + "/" + articleId
+    }).then(function(data) {
+        console.log(data);
+        $(".modalNote").modal("hide");
+        window.location = "/saved"
+    })
+});
