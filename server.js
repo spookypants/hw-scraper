@@ -18,10 +18,47 @@ app.use(express.json());
 // make public a static folder
 app.use(express.static("public"));
 
+// handlebars
+var exphbs = require("express-handlebars");
+app.engine("handlebars", exphbs({
+    defaultLayout: "main"
+}));
+app.set("view engine", "handlebars");
+
 // connect to mongo db
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
-
 mongoose.connect(MONGODB_URI);
+var db = mongoose.connection;
+
+db.on("error", function(error) {
+    console.log("Mongoose error: ", error);
+});
+
+db.once("open", function() {
+    console.log("Mongoose connection successful.");
+});
+
+//handlebars
+app.get("/", function(req, res) {
+    db.Article.find({ "saved": false }, function(error, data) {
+        var hbsObj = {
+            article: data
+        };
+        console.log(hbsObj);
+        res.render("home", hbsObj);
+    });
+});
+
+app.get("/saved", function(req, res) {
+    db.Article.find({ "saved": true })
+    .populate("notes")
+    .then(function(error, articles) {
+        var hbsObj = {
+            article: articles
+        };
+        res.render("saved", hbsObj);
+    });
+});
 
 
 //function to scrape pcmag desktop reviews and get title, URL
@@ -51,7 +88,7 @@ app.get("/scrape", function(req, res) {
         res.send("Scrape complete");
     });
 });
-// ROUTES
+
 //route to list all scraped headlines
 app.get("/articles", function(req, res) {
     db.Article.find({})
@@ -64,8 +101,15 @@ app.get("/articles", function(req, res) {
 });
 
 //route to save an article
-app.post("/saved", function(req, res) {
-    db.Article.create()
+app.post("/articles/saved/:id", function(req, res) {
+    db.Article.create({ "_id": req.params.id }, { "saved": true })
+    .then(function(err, dbArticle) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(dbArticle);
+        }
+    });
 });
 
 //route to list all saved articles
@@ -94,8 +138,17 @@ app.post("/saved/:id", function(req, res) {
     });
 });
 
-//route to delete a note
-app.delete()
+//route to delete an article
+app.delete("/articles/saved/:id", function(req, res) {
+    db.Article.findOneAndDelete({ "_id": req.params.id }, { "saved": false, "notes": []})
+    .then(function(err, dbArticle) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(dbArticle);
+        }
+    });
+});
 
 //route to unsave a note
 
