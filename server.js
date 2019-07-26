@@ -1,7 +1,7 @@
-var express = require("express");
-var cheerio = require("cheerio");
-var axios = require("axios");
-var mongoose = require("mongoose");
+var express = require("express"); // express
+var cheerio = require("cheerio"); // cheerio
+var axios = require("axios"); // axios
+var mongoose = require("mongoose"); //mongoose
 
 var PORT = process.env.PORT || 3000;
 
@@ -16,13 +16,11 @@ var app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // make public a static folder
-app.use(express.static("public"));
+app.use(express.static(__dirname + "/public"));
 
 // handlebars
-var exphbs = require("express-handlebars");
-app.engine("handlebars", exphbs({
-    defaultLayout: "main"
-}));
+var exphbs = require("express-handlebars"); // express handlebars
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // connect to mongo db
@@ -42,19 +40,20 @@ db.once("open", function() {
 app.get("/scrape", function(req, res) {
     axios.get("https://www.pcmag.com/reviews/desktops").then(function(response) {
         var $ = cheerio.load(response.data);
-        var result = {};
 
         $("div.review-deck").each(function(i, element){
-            var title = $(element).find("a").text().trim();
-            var link = $(element).find("a").attr("href");
-            var description = $(element).find("p.bottom-line-desktop").text().trim();
+            var result = {};
 
-            result.push({
-                title: title,
-                link: link,
-                description: description,
-                saved: false
-            });
+            result.title = $(element).find("a").text().trim();
+            result.description = $(element).find("p.bottom-line-desktop").text().trim();
+            result.link = $(element).find("a").attr("href");
+            result.saved = false;
+            // result.push({
+            //     title: title,
+            //     link: link,
+            //     description: description,
+            //     saved: false
+            // });
             db.Article.create(result)
             .then(function(dbArticle) {
                 console.log(dbArticle);
@@ -72,7 +71,7 @@ app.get("/", function(req, res) {
     db.Article.find({ saved: false })
     .then(function(dbArticle) {
         var hbsObj = {
-            article: dbArticle
+            articles: dbArticle
         };
         res.render("index", hbsObj);
     })
@@ -110,7 +109,7 @@ app.get("/saved", function(req, res) {
     db.Article.find({ saved: true })
     .then(function(dbArticle) {
         var hbsObj = {
-            article: dbArticle
+            articles: dbArticle
         };
         res.render("saved", hbsObj);
     })
@@ -137,7 +136,7 @@ app.post("/createNote/:id", function(req, res) {
             { _id: req.params.id }, 
             {note: dbNote._id},
             { new: true }
-            )
+            );
     }).then(function(dbArticle) {
         res.json(dbArticle);
     }).catch(function(err) {

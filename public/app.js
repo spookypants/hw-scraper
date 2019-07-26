@@ -18,10 +18,10 @@ $(".home").on("click", function() {
 });
 
 // active nav click
-$(".navbar-nav li").on("click", function() {
-    $(".navbar-nav li").removeClass("active");
-    $(this).addClass("active");
-});
+// $(".navbar-nav li").on("click", function() {
+//     $(".navbar-nav li").removeClass("active");
+//     $(this).addClass("active");
+// });
 
 // save article
 $(".save").on("click", function() {
