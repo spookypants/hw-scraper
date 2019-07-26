@@ -155,8 +155,8 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 //     });
 // });
 
-require("./routes/apiRoutes.js")(app);
-require("./routes/htmlRoutes.js")(app);
+require("./controllers/apiRoutes.js")(app);
+require("./controllers/htmlRoutes.js")(app);
 
 //start the server
 app.listen(PORT, function() {

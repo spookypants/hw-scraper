@@ -85,23 +85,23 @@ $(".addNote").on("click", function() {
 });
 
 //save note
-$("#savenote").on("click", function() {
-    var thisId = $(this).attr("data-id");
-    $.ajax({
-        method: "POST",
-        url: "/createNote/" + thisId,
-        data: {
-            title: $("#titleinput").val(),
-            body: $("#bodyinput").val()
-        }
-    }).then(function(data) {
-        console.log(data);
-        $("#notes").empty();
-    });
-    $("#titleinput").val("");
-    $("#bodyinput").val("");
-    $("#noteModal").val("");
-});
+// $("#savenote").on("click", function() {
+//     var thisId = $(this).attr("data-id");
+//     $.ajax({
+//         method: "POST",
+//         url: "/createNote/" + thisId,
+//         data: {
+//             title: $("#titleinput").val(),
+//             body: $("#bodyinput").val()
+//         }
+//     }).then(function(data) {
+//         console.log(data);
+//         $("#notes").empty();
+//     });
+//     $("#titleinput").val("");
+//     $("#bodyinput").val("");
+//     $("#noteModal").val("");
+// });
 
 // $(".deleteNote").on("click", function() {
 //     var noteId = $(this).attr("data-note-id");
