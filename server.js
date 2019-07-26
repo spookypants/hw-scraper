@@ -3,7 +3,7 @@ var cheerio = require("cheerio");
 var axios = require("axios");
 var mongoose = require("mongoose");
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 // require models
 var db = require("./models");
@@ -38,29 +38,6 @@ db.once("open", function() {
     console.log("Mongoose connection successful.");
 });
 
-//handlebars
-app.get("/", function(req, res) {
-    db.Article.find({ "saved": false }, function(error, data) {
-        var hbsObj = {
-            article: data
-        };
-        console.log(hbsObj);
-        res.render("home", hbsObj);
-    });
-});
-
-app.get("/saved", function(req, res) {
-    db.Article.find({ "saved": true })
-    .populate("notes")
-    .then(function(error, articles) {
-        var hbsObj = {
-            article: articles
-        };
-        res.render("saved", hbsObj);
-    });
-});
-
-
 //function to scrape pcmag desktop reviews and get title, URL
 app.get("/scrape", function(req, res) {
     axios.get("https://www.pcmag.com/reviews/desktops").then(function(response) {
@@ -75,7 +52,8 @@ app.get("/scrape", function(req, res) {
             result.push({
                 title: title,
                 link: link,
-                description: description
+                description: description,
+                saved: false
             });
             db.Article.create(result)
             .then(function(dbArticle) {
@@ -90,10 +68,13 @@ app.get("/scrape", function(req, res) {
 });
 
 //route to list all scraped headlines
-app.get("/articles", function(req, res) {
-    db.Article.find({})
+app.get("/", function(req, res) {
+    db.Article.find({ saved: false })
     .then(function(dbArticle) {
-        res.json(dbArticle);
+        var hbsObj = {
+            article: dbArticle
+        };
+        res.render("index", hbsObj);
     })
     .catch(function(err) {
         res.json(err);
@@ -101,46 +82,8 @@ app.get("/articles", function(req, res) {
 });
 
 //route to save an article
-app.post("/articles/saved/:id", function(req, res) {
-    db.Article.create({ "_id": req.params.id }, { "saved": true })
-    .then(function(err, dbArticle) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send(dbArticle);
-        }
-    });
-});
-
-//route to list all saved articles
-app.get("/saved", function(req, res) {
-    db.Article.find({})
-    .then(function(dbArticle) {
-        res.json(dbArticle);
-    })
-    .catch(function(err) {
-        res.json(err);
-    });
-});
-
-//route to save a note on a saved article
-app.post("/saved/:id", function(req, res) {
-    db.Note.create(req.body).then(function(dbNote) {
-        return db.Article.findOneAndUpdate(
-            { _id: req.params.id }, 
-            { $push: {note: dbNote._id} },
-            { new: true }
-            )
-    }).then(function(dbArticle) {
-        res.json(dbArticle);
-    }).catch(function(err) {
-        res.json(err);
-    });
-});
-
-//route to delete an article
-app.delete("/articles/saved/:id", function(req, res) {
-    db.Article.findOneAndDelete({ "_id": req.params.id }, { "saved": false, "notes": []})
+app.post("/save/:id", function(req, res) {
+    db.Article.update({ _id: req.params.id }, {$set: { saved: true }})
     .then(function(err, dbArticle) {
         if (err) {
             console.log(err);
@@ -150,8 +93,57 @@ app.delete("/articles/saved/:id", function(req, res) {
     });
 });
 
-//route to unsave a note
+//route to unsave an article
+app.post("/unsave/:id", function(req, res) {
+    db.Article.update({ _id: req.params.id }, {$set: { saved: false }})
+    .then(function(err, dbArticle) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(dbArticle);
+        }
+    });
+});
 
+//route to list all saved articles
+app.get("/saved", function(req, res) {
+    db.Article.find({ saved: true })
+    .then(function(dbArticle) {
+        var hbsObj = {
+            article: dbArticle
+        };
+        res.render("saved", hbsObj);
+    })
+    .catch(function(err) {
+        res.json(err);
+    });
+});
+
+//route to see all notes
+app.get("/getNotes/:id", function(req, res) {
+    db.Article.findOne({ _id: req.params.id })
+    .populate("note")
+    .then(function(dbArticle) {
+        res.json(dbArticle);
+    }).catch(function(err) {
+        res.json(err);
+    });
+});
+
+//route to save a note on a saved article
+app.post("/createNote/:id", function(req, res) {
+    db.Note.create(req.body).then(function(dbNote) {
+        return db.Article.findOneAndUpdate(
+            { _id: req.params.id }, 
+            {note: dbNote._id},
+            { new: true }
+            )
+    }).then(function(dbArticle) {
+        res.json(dbArticle);
+    }).catch(function(err) {
+        res.json(err);
+    });
+});
 
 //start the server
 app.listen(PORT, function() {

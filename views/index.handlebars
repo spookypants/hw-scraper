@@ -4,18 +4,17 @@
             <h1>Compuder Scraper</h1>
         </div>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12 articles">
         {{#if article}}
             {{#each article}}
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4>{{this.title}}</h4>
+                    <a href="{{link}}" target="_blank"><h4>{{title}}</h4></a>
                 </div>
                 <div class="panel-body">
-                    <p>{{this.description}}</p>
-                    <a href="{{this.link}}" target="_blank">{{this.link}}</a>
+                    <p>{{description}}</p>
                     <br><br>
-                    <button type="button" class="btn btn-success save" data-id={{this.id}}>Save Article</button>
+                    <button type="button" class="btn btn-success save" data-id={{_id}}>Save Article</button>
                 </div>
             </div>
             {{/each}}
