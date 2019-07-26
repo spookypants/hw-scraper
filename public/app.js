@@ -5,7 +5,7 @@ $(".scrape").on("click", function() {
         url: "/scrape",
     }).then(function(data) {
         console.log(data)
-        window.location.href = "/"
+        window.location.replace = "/"
     });
 });
 
@@ -13,7 +13,7 @@ $(".home").on("click", function() {
     $.get("/", function(req, res) {
         console.log(res);
     }).then(function(data) {
-        window.location.href = "/";
+        window.location.replace = "/";
     });
 });
 
@@ -40,7 +40,7 @@ $(".saved").on("click", function() {
     $.get("/saved", function(req, res) {
         console.log(res);
     }).then(function(data) {
-        window.location.href = "/saved";
+        window.location.replace = "/saved";
     });
 });
 
@@ -68,17 +68,17 @@ $(".addNote").on("click", function() {
             url: "/getNotes/" + thisId
         }).then(function(data) {
             console.log(data);
-                $("#notes").append("<h2>" + data.title + "</h2>");
-                $("#notes").append("<h3 id='notestitle'></h3>");
-                $("#notes").append("<p id='notesbody'></p>");
-                $("#notes").append("<div class='form-group'><label for='title'>Title: </label><input id='titleinput' class='form-control' name='title'></div>");
-                $("#notes").append("<div class='form-group'>label for='body'>Note: </label><input id='bodyinput' class='form-control' name='body'></div>");
-                $("#notes").append("<button class='btn btn-default' data-id='" + data._id + "' id='savenote'>Save Note</button>");
+            $("#notes").append("<h2>" + data.title + "</h2>");
+            $("#notes").append("<h3 id='notestitle'></h3>");
+            $("#notes").append("<p id='notesbody'></p>");
+            $("#notes").append("<div class='form-group'><label for='title'>Title: </label><input id='titleinput' class='form-control' name='title'></div>");
+            $("#notes").append("<div class='form-group'>label for='body'>Note: </label><input id='bodyinput' class='form-control' name='body'></div>");
+            $("#notes").append("<button class='btn btn-default' data-id='" + data._id + "' id='savenote'>Save Note</button>");
 
-                if (data.note) {
-                    $("#notestitle").text(data.note.title);
-                    $("#notesbody").text(data.note.body);
-                }
+            if (data.note) {
+                $("#notestitle").text(data.note.title);
+                $("#notesbody").text(data.note.body);
+            }
         });
         $('#noteModal').modal();
     }

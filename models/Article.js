@@ -1,12 +1,12 @@
 var mongoose = require("mongoose");
-var Note = require("./Note");
 
 var Schema = mongoose.Schema;
 
 var ArticleSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     description: {
         type: String,
