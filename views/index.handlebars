@@ -1,29 +1,39 @@
-<div class="container">
-    <div class="col-md-12 jumbotron">
-        <div class="text-center">
+<nav class='navbar navbar-default navbar-fixed-top'>
+    <div class='container'>
+        <a href='/' class='navbar-brand'>Compuder Scraper</a>
+    </div>
+    <div id='navbar' class='navbar-collapse collapse'>
+        <ul class='nav navbar-nav'>
+            <li><button class='btn btn-primary scrape'>Scrape Articles</button></li>
+            <li><button class='btn btn-primary saved'>Saved Articles</button></li>
+        </ul>
+    </div>
+</nav>
+
+<div class='container'>
+    <div class='col-md-12 jumbotron'>
+        <div class='text-center'>
             <h1>Compuder Scraper</h1>
         </div>
     </div>
-    <div class="col-md-12 articles">
-        {{#if article}}
-            {{#each article}}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <a href="{{link}}" target="_blank"><h4>{{title}}</h4></a>
-                </div>
-                <div class="panel-body">
-                    <p>{{description}}</p>
-                    <br><br>
-                    <button type="button" class="btn btn-success save" data-id={{_id}}>Save Article</button>
-                </div>
+    <div class='col-md-12 articles'>
+        {{#each article}}
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                <a href='{{url}}' target='_blank'><h4>{{title}}</h4></a>
             </div>
-            {{/each}}
+            <div class='panel-body'>
+                <p>{{description}}</p>
+                <br><br>
+                <button type='button' class='btn btn-success save' data-id='{{_id}}'>Save Article</button>
+            </div>
+        </div>
+        {{/each}}
         {{else}}
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class='panel panel-default'>
+            <div class='panel-body'>
                 <h4>Oops! We don't have any cool new compuder articles yet!</h4>
             </div>
         </div>
-        {{/if}}
     </div>
 </div>

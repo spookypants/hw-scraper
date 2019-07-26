@@ -1,27 +1,38 @@
-<div class="container">
-    <div class="col-md-12 jumbotron">
-        <div class="text-center">
+<nav class='navbar navbar-default navbar-fixed-top'>
+    <div class='container'>
+        <a href='#' class='navbar-brand'>Compuder Scrapings</a>
+    </div>
+    <div id='navbar' class='navbar-collapse collapse'>
+        <ul class='nav navbar-nav navbar-right top-buttons'>
+            <li><button class='btn btn-warning home'>Home</button></li>
+        </ul>
+    </div>
+</nav>
+
+<div class='container'>
+    <div class='col-md-12 jumbotron'>
+        <div class='text-center'>
             <h1>Saved Articles</h1>
         </div>
     </div>
-    <div class="col-md-12 articles">
+    <div class='col-md-12 articles'>
         {{#each article}}
             {{#if saved}}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <a href="{{link}}" target="_blank"><h4>{{title}}</h4></a>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <a href='{{url}}' target='_blank'><h4>{{title}}</h4></a>
                     </div>
-                    <div class="panel-body">
+                    <div class='panel-body'>
                         <p>{{description}}</p>
                         <br><br>
-                        <button class="btn btn-primary unsave" data-id="{{_id}}">Unsave</button>
-                        <button class="btn btn-primary addNote" data-id="{{_id}}">New Note</button>
+                        <button class='btn btn-primary unsave' data-id='{{_id}}'>Unsave</button>
+                        <button class='btn btn-primary addNote' data-id='{{_id}}'>New Note</button>
                     </div>
                 </div>
             {{/if}}
         {{else}}
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class='panel panel-default'>
+            <div class='panel-body'>
                 <h4>You have no saved articles!</h4>
             </div>
         </div>
@@ -29,14 +40,14 @@
     </div>
 </div>
 
-<div id="noteModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title text-center">New Note</h4>
+<div id='noteModal' class='modal fade' role='dialog'>
+    <div class='modal-dialog modal-md'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                <h4 class='modal-title text-center'>New Note</h4>
             </div>
-            <div class="modal-body" id="notes"></div>
+            <div class='modal-body' id='notes'></div>
         </div>
     </div>
 </div>
