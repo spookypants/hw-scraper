@@ -19,7 +19,7 @@ function postSavedArticles() {
             for (var i = 0; i < data.length; i++) {
                 $("#articleList").append(
                     `
-                    <div className="row">
+                    <div class="row">
                         <h5>${data[i].title}</h5>
                         <p>${data[i].description}</p>
                         <a href="#" class="addNote">Notes</a>

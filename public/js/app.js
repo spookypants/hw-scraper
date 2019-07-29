@@ -29,7 +29,7 @@ function postArticles(){
         if (data.length === 0){
             $("#articleList").append(
                 `
-                <div className="row">
+                <div class="row">
                     <h5>No Articles to Display!</h5>
                     <p>Click 'Scrape Articles' to load new compuder articles.</p>
                 </div>
@@ -39,7 +39,7 @@ function postArticles(){
             for (var i = 0; i < data.length; i++) {
                 $("#articleList").append(
                     `
-                    <div className="row">
+                    <div class="row">
                         <h5>${data[i].title}</h5>
                         <p>${data[i].description}</p>
                         <a target="_blank" href="${data[i].link}">See More</a>
