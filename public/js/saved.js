@@ -60,7 +60,7 @@ $("#saveNote").on("click", function() {
         method: "POST",
         url: "/note/" + $("#noteText").attr("data-id"),
         data: {
-            body: $("#noteText").val();
+            body: $("#noteText").val()
         }
     })
     .then(function(data) {
